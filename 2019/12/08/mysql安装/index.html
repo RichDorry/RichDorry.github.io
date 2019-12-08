@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><link rel="stylesheet" type="text/css" href="//fonts.loli.net/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.4"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.4"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><title>mysql安装 | 码农</title><meta name="generator" content="Hexo 4.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">mysql安装</h1><a id="logo" href="/.">码农</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="搜索"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">mysql安装</h1><div class="post-meta"><a href="/2019/12/08/mysql%E5%AE%89%E8%A3%85/#comments" class="comment-count"></a><p><span class="date">Dec 08, 2019</span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h5>centOS 7.3(64位)新服务器 安装MySQL5.7  --yum方式</h5>
+
+<ol>
+<li><p>rpm -qa|grep -i mysql</p>
+</li>
+<li><p>用命令 yum -y remove</p>
+<p>​      yum -y remove mysql-community-client-5.6.38-2.el7.x86_64</p>
+<p>​      卸载不掉的用 rpm -ev </p>
+<p>​      依次卸载 直到没有</p>
+</li>
+<li><p>操作rpm文件</p>
+<p>wget  <a href="http://repo.mysql.com/mysql57-community-release-el7-8.noarch.rpm" target="_blank" rel="noopener">http://repo.mysql.com/mysql57-community-release-el7-8.noarch.rpm</a></p>
+<p>rpm -ivh mysql57-community-release-el7-8.noarch.rpm</p>
+</li>
+<li><p>安装MySQL服务</p>
+<p>yum -y install mysql-server</p>
+<p>yum –installroot=/usr/local/mysql–releasever=/ -y install mysql-server（安装到指定目录）</p>
+</li>
+<li><p>配置  my.cnf        vim /etc/my.cnf</p>
+<p>[mysqld]</p>
+<p>#</p>
+<p># Remove leading # and set to the amount of RAM for the most important data</p>
+<p># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</p>
+<p># innodb_buffer_pool_size = 128M</p>
+<p>#</p>
+<p># Remove leading # to turn on a very important data integrity option: logging</p>
+<p># changes to the binary log between backups.</p>
+<p># log_bin</p>
+<p>#</p>
+<p># Remove leading # to set options mainly useful for reporting servers.</p>
+<p># The server defaults are faster for transactions and fast SELECTs.</p>
+<p># Adjust sizes as needed, experiment to find the optimal values.</p>
+<p># join_buffer_size = 128M</p>
+<p># sort_buffer_size = 2M</p>
+<p># read_rnd_buffer_size = 2M</p>
+<p>datadir=/var/lib/mysql</p>
+<p>socket=/var/lib/mysql/mysql.sock</p>
+<p>server_id = 1</p>
+<p>expire_logs_days = 3</p>
+</li>
+</ol>
+<p>   # Disabling symbolic-links is recommended to prevent assorted security risks</p>
+<p>   symbolic-links=0</p>
+<p>   log-error=/var/log/mysqld.log</p>
+<p>   pid-file=/var/run/mysqld/mysqld.pid</p>
+<ol start="6">
+<li><p>启动mysql服务</p>
+<p>service mysqld start</p>
+</li>
+<li><p>重置密码</p>
+<p>grep “password” /var/log/mysqld.log    查看临时密码</p>
+<p>或者<br>grep ‘temporary password’ /var/log/mysqld.log</p>
+</li>
+</ol>
+<p>   需要重置密码要不什么也不能操作</p>
+<p>   alter user ‘root’@’localhost’ identified by ‘IPyun20190729!+@=#’;  </p>
+<p>   第一个参数：IP地址</p>
+<p>   第二个参数：密码</p>
+<p>   grant all on <em>.</em> to ‘root’@’%’ identified by ‘IPyun20190729!+@=#’  with grant option;</p>
+<p>   第一个参数：数据库用户名（比如：root）</p>
+<p>   第二个参数：数据库密码</p>
+<p>   2、开放3306端口号</p>
+<p>   firewalld 防火墙（centos-7）运行命令,并重启：</p>
+<p>   firewall-cmd –zone=public –add-port=3306/tcp –permanent </p>
+<p>   firewall-cmd –reload</p>
+</div><div class="post-copyright"><blockquote><p>原文作者: Dorry</p><p>原文链接: <a href="http://yoursite.com/2019/12/08/mysql安装/">http://yoursite.com/2019/12/08/mysql安装/</a></p><p>版权声明: 转载请注明出处(必须保留作者署名及链接)</p></blockquote></div><div class="tags"></div><div class="post-share"><div class="social-share"><span>分享到:</span></div></div><div class="post-nav"><a href="/2019/11/10/hello-world/" class="next">Hello World</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#null"><span class="toc-text">centOS 7.3(64位)新服务器 安装MySQL5.7  --yum方式</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/12/08/mysql%E5%AE%89%E8%A3%85/">mysql安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/10/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a><span class="archive-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">网站地图</a> |  <a href="/atom.xml">订阅本站</a> |  <a href="/about/">联系博主</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次，本站总访客数:<i id="busuanzi_container_site_uv"><i id="busuanzi_value_site_uv"></i></i>人</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Dorry.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/" target="_blank" rel="noopener"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.4"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.4" async></script><link rel="stylesheet" type="text/css" href="/share/css/share.css"><script type="text/javascript" src="/share/js/social-share.js" charset="utf-8"></script><script type="text/javascript" src="/share/js/qrcode.js" charset="utf-8"></script></body></html>
