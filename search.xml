@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>mysql安装</title>
+      <link href="/2019/12/08/mysql%E5%AE%89%E8%A3%85/"/>
+      <url>/2019/12/08/mysql%E5%AE%89%E8%A3%85/</url>
+      
+        <content type="html"><![CDATA[<h5>centOS 7.3(64位)新服务器 安装MySQL5.7  --yum方式</h5><ol><li><p>rpm -qa|grep -i mysql</p></li><li><p>用命令 yum -y remove</p><p>​      yum -y remove mysql-community-client-5.6.38-2.el7.x86_64</p><p>​      卸载不掉的用 rpm -ev </p><p>​      依次卸载 直到没有</p></li><li><p>操作rpm文件</p><p>wget  <a href="http://repo.mysql.com/mysql57-community-release-el7-8.noarch.rpm" target="_blank" rel="noopener">http://repo.mysql.com/mysql57-community-release-el7-8.noarch.rpm</a></p><p>rpm -ivh mysql57-community-release-el7-8.noarch.rpm</p></li><li><p>安装MySQL服务</p><p>yum -y install mysql-server</p><p>yum –installroot=/usr/local/mysql–releasever=/ -y install mysql-server（安装到指定目录）</p></li><li><p>配置  my.cnf        vim /etc/my.cnf</p><p>[mysqld]</p><p>#</p><p># Remove leading # and set to the amount of RAM for the most important data</p><p># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</p><p># innodb_buffer_pool_size = 128M</p><p>#</p><p># Remove leading # to turn on a very important data integrity option: logging</p><p># changes to the binary log between backups.</p><p># log_bin</p><p>#</p><p># Remove leading # to set options mainly useful for reporting servers.</p><p># The server defaults are faster for transactions and fast SELECTs.</p><p># Adjust sizes as needed, experiment to find the optimal values.</p><p># join_buffer_size = 128M</p><p># sort_buffer_size = 2M</p><p># read_rnd_buffer_size = 2M</p><p>datadir=/var/lib/mysql</p><p>socket=/var/lib/mysql/mysql.sock</p><p>server_id = 1</p><p>expire_logs_days = 3</p></li></ol><p>   # Disabling symbolic-links is recommended to prevent assorted security risks</p><p>   symbolic-links=0</p><p>   log-error=/var/log/mysqld.log</p><p>   pid-file=/var/run/mysqld/mysqld.pid</p><ol start="6"><li><p>启动mysql服务</p><p>service mysqld start</p></li><li><p>重置密码</p><p>grep “password” /var/log/mysqld.log    查看临时密码</p><p>或者<br>grep ‘temporary password’ /var/log/mysqld.log</p></li></ol><p>   需要重置密码要不什么也不能操作</p><p>   alter user ‘root’@’localhost’ identified by ‘IPyun20190729!+@=#’;  </p><p>   第一个参数：IP地址</p><p>   第二个参数：密码</p><p>   grant all on <em>.</em> to ‘root’@’%’ identified by ‘IPyun20190729!+@=#’  with grant option;</p><p>   第一个参数：数据库用户名（比如：root）</p><p>   第二个参数：数据库密码</p><p>   2、开放3306端口号</p><p>   firewalld 防火墙（centos-7）运行命令,并重启：</p><p>   firewall-cmd –zone=public –add-port=3306/tcp –permanent </p><p>   firewall-cmd –reload</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2019/11/10/hello-world/"/>
+      <url>/2019/11/10/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
